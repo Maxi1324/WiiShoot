@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/3dmodelimporter"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_241"/>
+	<classpathentry kind="lib" path="J:/0000Schule/20201225_FRIDAY_POSProjekt/05 POS1/JFX3DModelImporters_EA_2014-02-09/jim3dsModelImporterJFX.jar"/>
+	<classpathentry kind="lib" path="J:/0000Schule/20201225_FRIDAY_POSProjekt/05 POS1/JFX3DModelImporters_EA_2014-02-09/jimColModelImporterJFX.jar"/>
+	<classpathentry kind="lib" path="J:/0000Schule/20201225_FRIDAY_POSProjekt/05 POS1/JFX3DModelImporters_EA_2014-02-09/jimFxmlModelImporterJFX.jar"/>
+	<classpathentry kind="lib" path="J:/0000Schule/20201225_FRIDAY_POSProjekt/05 POS1/JFX3DModelImporters_EA_2014-02-09/jimObjModelImporterJFX.jar"/>
+	<classpathentry kind="lib" path="J:/0000Schule/20201225_FRIDAY_POSProjekt/05 POS1/JFX3DModelImporters_EA_2014-02-09/jimStlMeshImporterJFX.jar"/>
+	<classpathentry kind="lib" path="J:/0000Schule/20201225_FRIDAY_POSProjekt/05 POS1/JFX3DModelImporters_EA_2014-02-09/jimX3dModelImporterJFX.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
