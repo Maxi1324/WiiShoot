@@ -1,6 +1,6 @@
 package Engine.Datacontainers;
 
-import java.awt.Point;
+import javafx.geometry.Bounds;
 
 public class Vector3 {
 
@@ -18,115 +18,65 @@ public class Vector3 {
 		setZ(z);
 	}
 
+	public Vector3(double x, double y, double z) {
+		setX((float) x);
+		setY((float) y);
+		setZ((float) z);
+	}
+
 	public Vector3(float[] vec) {
 		x = vec[0];
 		y = vec[1];
 		z = vec[2];
 	}
-	
+
 	public Vector3(double[] vec) {
-		x = (float)vec[0];
-		y = (float)vec[1];
-		z = (float)vec[2];
+		x = (float) vec[0];
+		y = (float) vec[1];
+		z = (float) vec[2];
+	}
+	
+	public Vector3(String x1, String y1, String z1) {
+		x = Float.parseFloat(x1);
+		y = Float.parseFloat(y1);
+		z = Float.parseFloat(z1);
 	}
 
-	public Vector3 rotate(Vector3 center, Vector3 angel) {
-		float x = -angel.getX();
-		float y = -angel.getY();
-		float z = -angel.getZ();
-		double[][] rotX = { 
-				{ 1, 0, 0 }, 
-				{ 0, (double) Math.cos(x), (double) -Math.sin(x) },
-				{ 0, (double) Math.sin(x), (double) Math.cos(x) } };
-		double[][] rotY = { 
-				{ (double) Math.cos(y), 0, (double) Math.sin(y) }, 
-				{ 0, 1, 0 },
-				{ (double) -Math.sin(y), 0, (double) Math.cos(y) } };
-
-		double[][] rotZ = { 
-				{ (double) Math.cos(z), (double) -Math.sin(z), 0 },
-				{ (double) Math.sin(z), (double) Math.cos(z), 0 }, 
-				{ 0, 0, 1 } };
-		
-		Vector3 point = this;
-		
-		double[][] arr = {(double[])point.toArrayDouble()};
-		double[][] newArr = multiplyMatrices(arr, rotX);
-		newArr = multiplyMatrices(newArr,rotY);
-		newArr = multiplyMatrices(newArr,rotZ);		
-		System.out.println(new Vector3(newArr[0]).subtract(new Vector3(.5f,0,.5f)));
-		return new Vector3(newArr[0]).subtract(new Vector3(1.3509035f,0,0.02532196f));
+	public Vector3(Bounds bounds) {
+		this.x = (float)(bounds.getMinX() + bounds.getMaxX())/2;
+		this.y = (float)(bounds.getMinY() + bounds.getMaxY())/2;
+		this.z = (float)(bounds.getMinZ() + bounds.getMaxZ())/2;
 	}
 
-	public static double[][] multiplyMatrices(double[][] m1, double[][] m2) {
-		double[][] ergebnismatrix = null;
+	public void rotate(Vector3 vec2) {
+		float x = vec2.getX();
+		float y = vec2.getY();
+		float z = vec2.getZ();
 
-		if (m1[0].length == m2.length) {
-			int zeilenm1 = m1.length;
-			int spaltenm1 = m1[0].length;
-			int spalenm2 = m2[0].length;
+		float[][] rotX = { { 1, 0, 0 }, { 0, (float) Math.cos(x), (float) -Math.sin(x) },
+				{ 0, (float) Math.sin(x), (float) Math.cos(x) } };
 
-			ergebnismatrix = new double[zeilenm1][spalenm2];
+		float[][] rotY = { { (float) Math.cos(y), 0, (float) Math.sin(y) }, { 0, 1, 0 },
+				{ (float) Math.sin(-y), 0, (float) Math.cos(y) } };
 
-			for (int i = 0; i < zeilenm1; i++) {
-				for (int j = 0; j < spalenm2; j++) {
-					ergebnismatrix[i][j] = 0;
-					for (int k = 0; k < spaltenm1; k++) {
-					  ergebnismatrix[i][j] += m1[i][k] * m2[k][j];
-					}
-				}
-			}
-		} else {
-			int zeilen = m1.length;
-			int spalten = m1[0].length;
-
-			ergebnismatrix = new double[zeilen][spalten];
-			for (int i = 0; i < m1.length; i++) {
-				for (int j = 0; j < m1[0].length; j++) {
-					ergebnismatrix[i][j] = 0;
-				}
-			}
-		}
-		return ergebnismatrix;
+		float[][] rotZ = { { (float) Math.cos(z), (float) -Math.sin(z), 0 },
+				{ (float) Math.sin(z), (float) Math.cos(z), 0 }, { 0, 0, 1 } };
+		Vector3 vec = this;
+		vec.multiply(rotX);
+		vec.multiply(rotY);
+		vec.multiply(rotZ);
 	}
 
-	public Vector3 multiply(Quaternion rotation) {
-		float num1 = rotation.getX() * 2f;
-		float num2 = rotation.getY() * 2f;
-		float num3 = rotation.getZ() * 2f;
-		float num4 = rotation.getX() * num1;
-		float num5 = rotation.getY() * num2;
-		float num6 = rotation.getZ() * num3;
-		float num7 = rotation.getX() * num2;
-		float num8 = rotation.getX() * num3;
-		float num9 = rotation.getY() * num3;
-		float num10 = rotation.getW() * num1;
-		float num11 = rotation.getW() * num2;
-		float num12 = rotation.getW() * num3;
+	public boolean groesserAls(Vector3 vec) {
+		return getX() >= vec.getX() && getY() >= vec.getY() && getZ() >= vec.getZ();
+	}
 
-		Vector3 point = this;
-
-		Vector3 vector3 = new Vector3();
-		vector3.setX((float) ((1.0 - ((double) num5 + (double) num6)) * (double) point.x
-				+ ((double) num7 - (double) num12) * (double) point.getY()
-				+ ((double) num8 + (double) num11) * (double) point.getZ()));
-		vector3.setY((float) (((double) num7 + (double) num12) * (double) point.x
-				+ (1.0 - ((double) num4 + (double) num6)) * (double) point.getY()
-				+ ((double) num9 - (double) num10) * (double) point.getZ()));
-		vector3.setZ((float) (((double) num8 - (double) num11) * (double) point.x
-				+ ((double) num9 + (double) num10) * (double) point.getY()
-				+ (1.0 - ((double) num4 + (double) num5)) * (double) point.getZ()));
-		return vector3;
+	public boolean kleinerAls(Vector3 vec) {
+		return getX() <= vec.getX() && getY() <= vec.getY() && getZ() <= vec.getZ();
 	}
 
 	public double magnitude() {
 		return Math.sqrt(x * x + y * y + z * z);
-	}
-
-	public void multiply(double f) {
-		x *= f;
-		y *= f;
-		z *= f;
 	}
 
 	public void normalise() {
@@ -142,6 +92,12 @@ public class Vector3 {
 		newVec.setY(y + vec.getY());
 		newVec.setZ(z + vec.getZ());
 		return newVec;
+	}
+
+	public void selfAdd(Vector3 vec) {
+		x = x + vec.getX();
+		y = y + vec.getY();
+		z = z + vec.getZ();
 	}
 
 	public Vector3 subtract(Vector3 vec) {
@@ -168,6 +124,25 @@ public class Vector3 {
 		return newVec;
 	}
 
+	public void multiply(float[][] matrix) {
+		if (matrix[0].length > 3 || matrix[0].length < 3) {
+			System.err.println("Vector kann nur mit einer 3 * x matrix multpliziert werden");
+			return;
+		}
+		float[] vector = toArray();
+		float[] ergebnis = new float[3];
+		for (int i = 0; i < 3; i++) {
+			float sum = 0;
+			for (int j = 0; j < matrix.length; j++) {
+				sum += matrix[j][i] * vector[i];
+			}
+			ergebnis[i] = sum;
+		}
+		setX(ergebnis[0]);
+		setY(ergebnis[1]);
+		setZ(ergebnis[2]);
+	}
+
 	public Vector3 add(float wert) {
 		return add(new Vector3(wert, wert, wert));
 	}
@@ -184,6 +159,10 @@ public class Vector3 {
 		return divide(new Vector3(wert, wert, wert));
 	}
 
+	public static Vector3 randomVector(float max) {
+		return new Vector3(Math.random() * max, Math.random() * max, Math.random() * max);
+	}
+
 	public float[] toArray() {
 		float[] arr = new float[3];
 		arr[0] = x;
@@ -191,13 +170,36 @@ public class Vector3 {
 		arr[2] = z;
 		return arr;
 	}
-	
+
 	public double[] toArrayDouble() {
 		double[] arr = new double[3];
-		arr[0] = x;
-		arr[1] = y;
-		arr[2] = z;
+		arr[0] = (double) x;
+		arr[1] = (double) y;
+		arr[2] = (double) z;
 		return arr;
+	}
+
+	public float maxAxis() {
+		float max;
+		max = getX();
+		if (getY() > max)
+			max = getY();
+		if (getZ() > max)
+			max = getZ();
+		return max;
+	}
+
+	public float distance() {
+		return distance(new Vector3());
+	}
+
+	public float distance(Vector3 vec) {
+		Vector3 vecnew = this.subtract(vec);
+		float x = vecnew.getX();
+		float y = vecnew.getY();
+		float z = vecnew.getZ();
+		float dis = (float) Math.sqrt(Math.pow(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)), 2) + Math.pow(z, 2));
+		return dis;
 	}
 
 	public float getX() {
@@ -228,4 +230,63 @@ public class Vector3 {
 	public String toString() {
 		return "Vector3 [x=" + x + ", y=" + y + ", z=" + z + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(x);
+		result = prime * result + Float.floatToIntBits(y);
+		result = prime * result + Float.floatToIntBits(z);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Vector3 other = (Vector3) obj;
+		if (other.getX() != this.x)
+			return false;
+		if (other.getY() != this.y)
+			return false;
+		if (other.getZ() != this.z)
+			return false;
+		return true;
+	}
+	
+	public static float distance(Vector3 a, Vector3 b) {
+		Vector3 rA = a.subtract(b);
+		float d = (float) Math.sqrt(((rA.getX()*rA.getX())+(rA.getY()*rA.getY())));
+		float distance = (float) Math.sqrt(((d*d)+(rA.getZ()*rA.getZ())));
+		return distance;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
