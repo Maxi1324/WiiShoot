@@ -71,7 +71,7 @@ the uml diagramm
 ## Learnings
 
 In this Project I learned a lot. 
-- I don´t have to reinvent the wheel. Afterwards I thing, is was not worth the effort. If I would have done this Project in Unity, it would have took much less time.
+- I don't have to reinvent the wheel. Afterwards I think, it was not worth the effort. If I would have done this Project in Unity, the Project would have been doine in just a few days.
 - JavaFX. This was my first big JavaFX Project.
 - Improved 3D Modelling Skills
 - Improved understanding of Game development.
